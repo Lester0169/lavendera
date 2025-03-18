@@ -1,0 +1,222 @@
+body {
+    display: flex;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+}
+
+.header {
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.logo {
+    height: 50px;
+}
+
+.header-right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    position: relative;
+    right: 35px;
+}
+
+.header-right i {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.sidebar {
+    width: 70px;
+    background-color: #1678F3;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    justify-content: space-between;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    height: calc(100% - 70px);
+    z-index: 1001;
+    transition: width 0.3s ease;
+}
+
+.sidebar-items {
+    flex-grow: 1;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+    cursor: pointer;
+    transition: background 0.3s, width 0.3s;
+    position: relative;
+}
+
+.sidebar-item i {
+    font-size: 18px;
+    transition: margin 0.3s;
+}
+
+.sidebar-item span {
+    display: none;
+    font-size: 16px;
+    margin-left: 15px;
+    white-space: nowrap;
+    transition: display 0.3s;
+}
+
+.sidebar:hover {
+    width: 250px;
+}
+
+.sidebar:hover .sidebar-item span {
+    display: inline;
+}
+
+.sidebar-item:hover {
+    background-color: #F984F4;
+}
+
+.sidebar-logout {
+    padding-top: 20px;
+    position: relative;
+    bottom: 30px;
+}
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px; 
+    padding: 100px 40px 40px 100px; 
+    background-color: #F5F5F5;
+    width: calc(100% - 70px);
+    overflow: hidden; 
+}
+
+.sidebar:hover ~ .main-container {
+    margin-left: 250px;
+}
+
+#order-details,
+#order-tracking {
+    background-color: #fff;
+    padding: 40px; /* Increased padding for more space */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    max-width: 50%; /* Increased max-width for larger sections */
+    overflow-y: auto; /* Ensure content is scrollable if needed */
+}
+
+#order-tracking {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #1678F3;
+    font-size: 28px; /* Increased font size */
+    text-align: center;
+}
+
+#real-time {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 28px; /* Increased font size */
+    color: #000;
+    text-align: center;
+}
+
+.status-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px; /* Increased margin for better spacing */
+}
+
+.status-icon img {
+    width: 200px; /* Increased image size */
+    height: 200px; /* Increased image size */
+    border-radius: 10px;
+}
+
+.status-indicators {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0; /* Increased margin for better spacing */
+}
+
+.status-indicator {
+    width: 60px; /* Increased width for better visibility */
+    height: 12px; /* Increased height for better visibility */
+    background-color: #E0E0E0;
+    margin: 0 5px;
+    border-radius: 5px;
+}
+
+.status-indicator.active {
+    background-color: #1678F3;
+}
+
+#status-text {
+    font-size: 20px; /* Increased font size */
+    color: #555;
+    margin-bottom: 30px; /* Increased margin for better spacing */
+    text-align: center;
+}
+
+.cancel-button,
+.pay-button {
+    display: block;
+    background-color: #FF6347;
+    color: white;
+    border: none;
+    padding: 15px 30px; /* Increased padding for larger buttons */
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px; /* Increased font size */
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 20px; /* Increased margin for better spacing */
+}
+
+.pay-button {
+    background-color: #1678F3;
+}
+
+#order-details h2 {
+    display: flex;
+    align-items: center;
+    font-size: 24px; /* Increased font size */
+    color: #1678F3;
+}
+
+#order-details h2 i {
+    margin-right: 10px;
+}
+
+#order-details p {
+    margin: 15px 0; /* Increased margin for better spacing */
+    font-size: 16px; /* Increased font size */
+    color: #333;
+}
+
+a {
+    color: #1678F3;
+    text-decoration: none;
+}

@@ -1,0 +1,262 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.logo {
+    height: 50px;
+}
+
+.header-right {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    right: 40px;
+}
+
+.header-right i {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.main-container {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #F5F5F5;
+    margin-left: 70px;
+    transition: margin-left 0.3s;
+    margin-top: 80px;
+}
+.sidebar:hover ~ .main-container {
+    margin-left: 250px;
+}
+
+.sidebar {
+    width: 70px;
+    background-color: #1678F3;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    justify-content: space-between;
+    position: fixed;
+    top: 75px;
+    left: 0;
+    height: calc(100% - 75px);
+    z-index: 1001;
+    transition: width 0.3s ease;
+}
+
+.sidebar-items {
+    flex-grow: 1;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+    cursor: pointer;
+    transition: background 0.3s, width 0.3s;
+    position: relative;
+}
+
+.sidebar-item i {
+    font-size: 18px;
+    transition: margin 0.3s;
+}
+
+.sidebar-item span {
+    display: none;
+    font-size: 16px;
+    margin-left: 15px;
+    white-space: nowrap;
+    transition: display 0.3s;
+}
+
+.sidebar:hover {
+    width: 250px;
+}
+
+.sidebar:hover .sidebar-item span {
+    display: inline;
+}
+
+.sidebar-item:hover {
+    background-color: #F984F4;
+}
+
+.sidebar-logout {
+    padding-top: 20px;
+    position: relative;
+    bottom: 30px;
+}
+
+.content {
+    background-color: #FFFFFF;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.laundrywoman {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #E0E0E0;
+    padding-bottom: 10px;
+}
+
+.laundrywoman-img img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.laundrywoman-info {
+    margin-left: 20px;
+    width: 60%;
+}
+
+.laundrywoman-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 30%;
+}
+
+.rebook-button {
+    background-color: #1678F3;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    display: block;
+}
+
+.rating i {
+    color: #FFD700;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+    max-width: 600px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.favorite-button,
+.cancel-button {
+    background-color: #1678F3;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.favorite-button {
+    background-color: green;
+}
+
+.cancel-button {
+    background-color: red;
+}
+
+.contract-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contract-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.contract-item label {
+    margin-bottom: 5px;
+}
+
+.contract-item input,
+.contract-item textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.contract-item textarea {
+    resize: none;
+    height: 80px;
+}
+
+#save-contract-button,
+#cancel-contract-button {
+    background-color: #1678F3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+#cancel-contract-button {
+    background-color: red;
+}
