@@ -7,7 +7,67 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
-// Admin dashboard content goes here
+// Database connection
+$servername = "localhost"; // Change if necessary
+$username = "root"; // Change if necessary
+$password = ""; // Change if necessary
+$dbname = "lavendera"; // Replace with your actual database name
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch the total number of users
+$sql = "SELECT COUNT(*) AS total_users FROM users";
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
+$total_users = $row['total_users'];
+
+// Fetch total transactions per month
+$sql_transactions = "
+    SELECT 
+        MONTH(transaction_date) AS month,
+        YEAR(transaction_date) AS year,
+        COUNT(*) AS total_transactions
+    FROM transactions
+    GROUP BY YEAR(transaction_date), MONTH(transaction_date)
+    ORDER BY year DESC, month DESC";
+$result_transactions = $conn->query($sql_transactions);
+
+// Fetch admin username (do not change the admin username)
+$sql_admin = "SELECT username FROM admin WHERE id = 1"; // Assuming the admin's ID is 1
+$result_admin = $conn->query($sql_admin);
+$admin_row = $result_admin->fetch_assoc();
+$admin_username = $admin_row['username'];
+
+// Prepare the data for the chart
+$months = [];
+$total_transactions = [];
+$percentage_customers = [];
+
+while ($row_transactions = $result_transactions->fetch_assoc()) {
+    $month_year = $row_transactions['month'] . '-' . $row_transactions['year'];
+    $months[] = $month_year;
+    $total_transactions[] = $row_transactions['total_transactions'];
+
+    // Calculate the percentage of customers who have made transactions
+    $sql_customers = "SELECT COUNT(DISTINCT user_id) AS total_customers 
+                      FROM transactions 
+                      WHERE MONTH(transaction_date) = {$row_transactions['month']} 
+                      AND YEAR(transaction_date) = {$row_transactions['year']}";
+    $result_customers = $conn->query($sql_customers);
+    $customer_row = $result_customers->fetch_assoc();
+    $total_customers = $customer_row['total_customers'];
+
+    $percentage = ($total_customers / $total_users) * 100;
+    $percentage_customers[] = round($percentage, 2);
+}
+
+// Close the connection
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +80,7 @@ if (!isset($_SESSION['admin_id'])) {
         body {
             display: flex;
             margin: 0;
-            font-family: "Averia Serif Libre", serif;
+            font-family: "Arial", serif;
         }
         .header {
             background-color: #ffffff;
@@ -33,9 +93,6 @@ if (!isset($_SESSION['admin_id'])) {
             position: fixed;
             top: 0;
             z-index: 1000;
-        }
-        .logo1 {
-            height: 60px;
         }
         #sidebar {
             width: 250px;
@@ -53,35 +110,44 @@ if (!isset($_SESSION['admin_id'])) {
             color: #fff;
             text-decoration: none;
             display: block;
-            padding: 10px 0;
+            padding: 10px;
+            
         }
         #sidebar a:hover {
             background: #F984F4;
+            border-radius: 10;
         }
         #sidebar a:focus {
             outline: none;
             background: #1463c2;
         }
         #content {
-            margin-left: 250px; /* This should match the sidebar width */
-            padding: 100px 20px 20px; /* Adjusted padding for fixed header */
-            width: calc(100% - 250px); /* Adjusted for sidebar width */
+            margin-left: 250px;
+            padding: 100px 20px 20px;
+            width: calc(100% - 250px);
             background-color: #f4f4f4;
         }
         .card {
             margin-bottom: 20px;
         }
+        .header .laundry_logo {
+            width: 15%;
+            height: auto;
+            position: relative;
+            left: 20px;
+        }
     </style>
 </head>
 <body>
     <header class="header">
-        <img class="logo1" src="Group 31642.png" alt="Laundry Provider Logo">
+        <img class="laundry_logo" src="logo1.png" alt="Laundry Provider Logo">
     </header>
     
     <div id="sidebar">
         <div>
-            <a href="dashboard.php">Dashboard</a>
-            <a href="manage.php">Manage Applications</a>
+            <a href="dashboard.php">Dashboard Overview</a>
+            <a href="manage.php">Customer Management</a>
+            <a href="manage.php">Order Status</a>
         </div>
         <div>
             <a href="logout.php">Logout</a>
@@ -89,68 +155,36 @@ if (!isset($_SESSION['admin_id'])) {
     </div>
     
     <div id="content">
-        <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
+        <h1>Welcome, <?php echo htmlspecialchars($admin_username); ?>!</h1>
         
         <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="card bg-primary text-white">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Users</h5>
-                        <p class="card-text">1,234</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card bg-success text-white">
-                    <div class="card-body">
-                        <h5 class="card-title">Active Users</h5>
-                        <p class="card-text">567</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card bg-warning text-white">
-                    <div class="card-body">
-                        <h5 class="card-title">Pending Requests</h5>
-                        <p class="card-text">24</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card bg-danger text-white">
-                    <div class="card-body">
-                        <h5 class="card-title">Issues</h5>
-                        <p class="card-text">8</p>
-                    </div>
-                </div>
+    <!-- Total Users Card -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text"><?php echo $total_users; ?></p>
             </div>
         </div>
+    </div>
+
+    <!-- Total Transactions Card (added beside Total Users) -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Transactions</h5>
+                <p class="card-text"><?php echo array_sum($total_transactions); ?></p>
+            </div>
+        </div>
+    </div>
+</div>
+
 
         <div class="row">
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">User Activity</h5>
-                        <!-- Placeholder for a chart -->
-                        <canvas id="userActivityChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Recent Notifications</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item">New user registered</li>
-                            <li class="list-group-item">Password change request</li>
-                            <li class="list-group-item">3 users reported an issue</li>
-                            <li class="list-group-item">New admin message</li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="col-lg-12">
+                <canvas id="transactionChart" width="400" height="200"></canvas>
             </div>
         </div>
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -158,25 +192,32 @@ if (!isset($_SESSION['admin_id'])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Placeholder for a chart (e.g., User Activity Chart)
-        var ctx = document.getElementById('userActivityChart').getContext('2d');
-        var userActivityChart = new Chart(ctx, {
+        var ctx = document.getElementById('transactionChart').getContext('2d');
+        var transactionChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                labels: <?php echo json_encode($months); ?>,
                 datasets: [{
-                    label: 'User Activity',
-                    data: [10, 50, 25, 70, 40, 90],
+                    label: 'Total Transactions',
+                    data: <?php echo json_encode($total_transactions); ?>,
                     backgroundColor: 'rgba(22, 120, 243, 0.2)',
                     borderColor: '#1678F3',
                     borderWidth: 2
+                }, {
+                    label: 'Percentage of Customers',
+                    data: <?php echo json_encode($percentage_customers); ?>,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    type: 'line'
                 }]
             },
             options: {
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        max: 100
                     }
                 }
             }

@@ -12,33 +12,8 @@ if (!isset($_SESSION['admin_id'])) {
 // Include database configuration
 include('config.php');
 
-// Handle approval and disapproval actions
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $application_id = $_POST['application_id'];
-    if (isset($_POST['approve'])) {
-        $application_status = 'approved';
-    } elseif (isset($_POST['disapprove'])) {
-        $application_status = 'disapproved';
-    }
-
-    if (isset($application_status)) {
-        // Update the application status
-        $stmt = $conn->prepare("UPDATE business_applications SET application_status = ? WHERE id = ?");
-        if (!$stmt) {
-            die("Error preparing UPDATE statement: " . $conn->error);
-        }
-        $stmt->bind_param("si", $application_status, $application_id);
-        if ($stmt->execute()) {
-            $message = "Application status updated to " . $application_status;
-        } else {
-            $message = "Error updating application status: " . $stmt->error;
-        }
-        $stmt->close();
-    }
-}
-
 // Fetch all business applications
-$sql = "SELECT * FROM business_applications";
+$sql = "SELECT * FROM Customer_Management";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -55,7 +30,7 @@ $result = $conn->query($sql);
             display: flex;
             flex-direction: column;
             margin: 0;
-            font-family: "Averia Serif Libre", serif;
+            font-family: "Arial", serif;
             background-color: #f0f8ff;
         }
         .header {
@@ -85,7 +60,7 @@ $result = $conn->query($sql);
             color: #fff;
             text-decoration: none;
             display: block;
-            padding: 10px 0;
+            padding: 10px;
         }
         #sidebar a:hover {
             background: #F984F4;
@@ -123,24 +98,55 @@ $result = $conn->query($sql);
             padding: 5px 10px;
             font-size: 12px;
         }
+        .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-input {
+    padding: 10px;
+    font-size: 16px;
+    width: 250px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+.header .laundry_logo {
+            width: 15%;
+            height: auto;
+            position: relative;
+            left: 20px;
+        }
     </style>
 </head>
 <body>
     <header class="header">
-        <img class="logo1" src="Group 31642.png" alt="Business Logo">
+        <img class="laundry_logo" src="logo1.png" alt="Business Logo">
     </header>
     
     <div id="sidebar">
         <div>
-            <a href="dashboard.php">Dashboard</a>
-            <a href="manage.php">Manage Applications</a>
+            <a href="dashboard.php">Dashboard Overview</a>
+            <a href="manage.php">Customer Management</a>
+            <a href="manage.php">Order Status</a>
         </div>
         <div>
             <a href="logout.php">Logout</a>
         </div>
     </div>
     <div id="content">
-        <h1>Manage Business Applications</h1>
+    <div class="header-content">
+        <h1>Customer Management</h1>
+        <div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search Customer..." onkeyup="searchFunction()">
+   </div>
+</div>
         <?php if (!empty($message)): ?>
             <div class="alert alert-info"><?php echo htmlspecialchars($message); ?></div>
         <?php endif; ?>
@@ -148,34 +154,26 @@ $result = $conn->query($sql);
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Business Name</th>
+                    <th>Full Name</th>
                     <th>Full Address</th>
-                    <th>Business Permit</th>
-                    <th>Availability</th>
+                    <th>Date</th>
+                    <th>Type of Service</th>
                     <th>Phone Number</th>
-                    <th>Application Status</th>
-                    <th>Actions</th>
+                    <th>Bill</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
             <?php while ($row = $result->fetch_assoc()) : ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($row['id']); ?></td>
-                    <td><?php echo htmlspecialchars($row['business_name']); ?></td>
-                    <td><?php echo htmlspecialchars($row['full_address']); ?></td>
-                    <td>
-                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#permitModal" onclick="viewPermit('<?php echo htmlspecialchars('../' . $row['business_permit']); ?>')">View Permit</button>
-                    </td>
-                    <td><?php echo htmlspecialchars($row['availability']); ?></td>
-                    <td><?php echo htmlspecialchars($row['phone_number']); ?></td>
-                    <td><?php echo htmlspecialchars($row['application_status']); ?></td>
-                    <td class="actions">
-                        <form method="post" action="">
-                            <input type="hidden" name="application_id" value="<?php echo $row['id']; ?>">
-                            <button type="submit" name="approve" class="btn btn-success btn-sm">Approve</button>
-                            <button type="submit" name="disapprove" class="btn btn-danger btn-sm">Disapprove</button>
-                        </form>
-                    </td>
+                    <td><?php echo htmlspecialchars($row['ID']); ?></td>
+                    <td><?php echo htmlspecialchars($row['Full_Name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['Full_Address']); ?></td>
+                    <td><?php echo htmlspecialchars($row['Date']); ?></td>
+                    <td><?php echo htmlspecialchars($row['Type_of_Service']); ?></td>
+                    <td><?php echo htmlspecialchars($row['Phone_Number']); ?></td>
+                    <td><?php echo htmlspecialchars($row['Bill']); ?></td>
+                    <td><?php echo htmlspecialchars($row['Status']); ?></td>
                 </tr>
             <?php endwhile; ?>
             </tbody>
@@ -201,6 +199,33 @@ $result = $conn->query($sql);
         function viewPermit(url) {
             document.getElementById('permitFrame').src = url;
         }
+        function searchFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById('searchInput');
+    filter = input.value.toUpperCase();
+    table = document.querySelector('table');
+    tr = table.getElementsByTagName('tr');
+
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName('td');
+        let matchFound = false;
+        for (let j = 0; j < td.length; j++) {
+            if (td[j]) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    matchFound = true;
+                    break;
+                }
+            }
+        }
+        if (matchFound) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+}
+
     </script>
 </body>
 </html>
