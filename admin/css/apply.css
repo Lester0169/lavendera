@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Averia Serif Libre", serif;
+    background-color: #f0f8ff; /* Light background color for the whole page */
+}
+
+.container {
+    width: 85%;
+    margin: auto;
+}
+
+.header {
+    background-color: transparent;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.logo1 {
+    height: 60px;
+    margin-right: 20px;
+    position: relative;
+    right: 51px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.main-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    background: #1E90FF; /* Match the blue background */
+    color: #fff; /* White text */
+    min-height: calc(100vh - 80px); /* Adjust for header height */
+    position: relative;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('Login Form.png') no-repeat center center;
+    background-size: cover;
+    filter: blur(8px);
+    z-index: -1;
+}
+
+.form-container {
+    width: 60%;
+    background: rgba(255, 255, 255, 0.9); /* White background with slight transparency */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #000; /* Black text inside the form */
+    z-index: 1;
+    margin-top: 20px;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    color: #087771;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+form fieldset {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+form legend {
+    padding: 0 10px;
+    font-weight: bold;
+    color: #3E77E5;
+    font-size: 1.2em;
+}
+
+form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="date"],
+form input[type="number"],
+form input[type="file"],
+form select,
+form textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+.btn {
+    color: #FFF;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 15px 10px;
+    background: linear-gradient(to right, #F984F4, #1678F3);
+    border-radius: 40px;
+    margin-top: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 700;
+    transition: all .1s ease-in-out;
+    display: block;
+    width: 100%;
+    text-align: center;
+}

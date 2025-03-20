@@ -1,0 +1,342 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    color: #1678F3;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header .logo img {
+    height: 50px;
+}
+
+header .header-right {
+    display: flex;
+    align-items: center;
+}
+
+.user-name {
+    margin-right: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+header .notification {
+    position: relative;
+    background: none;
+    border: none;
+    color: #1678F3;
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+header .notification .fa-bell {
+    font-size: 24px;
+}
+
+header .notification span {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 12px;
+    color: white;
+}
+
+.main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+aside {
+    background-color: #1678F3;
+    color: white;
+    padding: 20px;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: width 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+aside:hover {
+    width: 200px;
+}
+
+aside .menu {
+    flex-grow: 1;
+}
+
+aside ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+aside ul li {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    cursor: pointer;
+    padding: 10px;
+    transition: background 0.3s, color 0.3s;
+    border-radius: 8px;
+}
+
+aside ul li i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+aside ul li span {
+    display: none;
+}
+
+aside:hover ul li span {
+    display: inline;
+}
+
+aside ul li:hover {
+    background-color: #F984F4;
+    color: #333;
+}
+
+aside ul li a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+aside ul li a:hover {
+    color: #333;
+}
+
+.logout {
+    margin-top: auto;
+    position: relative;
+    top: 31px;
+}
+main {
+    flex-grow: 1;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+#appointments {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#total-earnings {
+    grid-column: 2;
+    grid-row: 1;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+#total-earnings .earnings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1678F3;
+    color: white;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+}
+
+#total-earnings .earnings-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+#total-earnings .earnings-header i {
+    font-size: 24px;
+}
+
+#total-earnings .earnings-content {
+    padding: 20px 0;
+}
+
+.earnings-label {
+    font-size: 16px;
+    color: #777;
+}
+
+.earnings-amount {
+    font-size: 36px;
+    color: #333;
+    margin: 0;
+}
+
+#transaction-history {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#completed-jobs {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+h2 {
+    margin-top: 0;
+    border-bottom: 2px solid #1678F3;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+    color: #1678F3;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.appointment-item, .job-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+.contract-details p,
+.contract-details ul {
+    margin: 10px 0;
+}
+
+.contract-details ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+button {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #1678F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #125ec7;
+}
+
+.accept-btn {
+    background-color: #4CAF50;
+}
+
+.decline-btn {
+    background-color: #f44336;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.hidden {
+    display: none;
+}
