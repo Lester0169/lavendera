@@ -82,12 +82,18 @@ if (isset($_SESSION['admin_id'])) {
             background: linear-gradient(to right, #F984F4, #1678F3); /* Keep the gradient on hover */
             opacity: 0.9;
         }
+        .header .laundry_logo {
+            width: 15%;
+            height: auto;
+            position: relative;
+            left: 20px;
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <img class="logo1" src="Group 31642.png" alt="Laundry Provider Logo">
+            <img class="laundry_logo" src="logo1.png" alt="Laundry Provider Logo">
         </div>
     </header>
 
